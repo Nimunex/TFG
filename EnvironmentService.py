@@ -1,10 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 28 17:30:34 2020
 
-@author: pi
-"""
 
 from bluepy import btle
 from bluepy.btle import Peripheral, DefaultDelegate
@@ -12,6 +6,8 @@ import os.path
 import struct
 import sys
 import binascii
+#import Device
+#from Device import Device, DeviceDelegate
 
 
 #Useful functions

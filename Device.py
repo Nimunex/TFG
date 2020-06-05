@@ -1,10 +1,4 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 29 14:05:12 2020
 
-@author: pi
-"""
 
 from bluepy import btle
 from bluepy.btle import Peripheral, DefaultDelegate
@@ -27,6 +21,52 @@ class Device(Peripheral):
         #self.ui = UserInterfaceService(self)
         #self.motion = MotionService(self)
         #self.sound = SoundService(self)
+        
+        
+        
+## Useful functions
+
+
+
+def getTimeStamp():
+    ts = time.time()
+    ts_str = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    return ts_str
+
+## Notifications /Indications Handler
+
+class DeviceDelegate(DefaultDelegate):
+
+    def handleNotification(self, hnd, data):
+        
+        if (hnd == temperature_handle):
+            data = bytearray(data)
+            temperature_value =int.from_bytes(data, byteorder='big', signed=False) 
+            ##teptep = binascii.b2a_hex(data)
+            print("A notification was received -> Temperature: ", temperature_value, "C")
+        
+        elif (hnd == pressure_handle):
+            data = bytearray(data)
+            pressure_value =int.from_bytes(data, byteorder='big', signed=False) 
+            ##pressure_int, pressure_dec = self._extract_pressure_data(data)
+            print("A notification was received -> Pressure: ", pressure_value, "  hPa")
+        
+        elif (hnd == humidity_handle):
+            data = bytearray(data)
+            humidity_value =int.from_bytes(data, byteorder='big', signed=False)                  
+#            timestamp = getTimeStamp()
+            print("A notification was received -> Humidity: ", humidity_value, "  %")
+        
+        elif (hnd == gas_handle):
+            eco2, tvoc = self._extract_gas_data(data)
+            print("A notification was received -> Gas: ", humidity_value, "  %")
+
+        elif (hnd == e_color_handle):
+            teptep = binascii.b2a_hex(data)
+            print("A notification was received -> Color: ", humidity_value, "  %")
+            
+            
+            
         
         
     
