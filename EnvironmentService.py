@@ -6,8 +6,7 @@ import os.path
 import struct
 import sys
 import binascii
-#import Device
-#from Device import Device, DeviceDelegate
+
 
 
 #Useful functions
@@ -49,7 +48,73 @@ gas_handle = None
 color_handle = None
 
 
+
+## Useful functions
+
+
+
+def getTimeStamp():
+    ts = time.time()
+    ts_str = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    return ts_str
+
+## Notifications /Indications Handler
+
+class DeviceDelegate(DefaultDelegate):
+    
+
+    def handleNotification(self, hnd, data):
+        
+        if (hnd == temperature_handle):
+            data = bytearray(data)
+            temperature_int = data[0]
+            temperature_dec = data[1]
+            print("A notification was received -> Temperature:", temperature_int, ',', temperature_dec, "ºC")
+        
+        elif (hnd == pressure_handle):
+            teptep = binascii.b2a_hex(data)
+            pressure_int = 0
+            for i in range(0, 4):
+                    pressure_int += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            pressure_dec = int(teptep[-2:], 16)
+            print("A notification was received -> Pressure: ", pressure_int,',', pressure_dec, "  hPa")
+        
+        elif (hnd == humidity_handle):
+            data = bytearray(data)
+            humidity_value =int.from_bytes(data, byteorder='big', signed=False)                  
+#            timestamp = getTimeStamp()
+            print("A notification was received -> Humidity: ", humidity_value, "  %")
+        
+        elif (hnd == gas_handle):
+            teptep = binascii.b2a_hex(data)
+            eco2 = 0
+            tvoc = 0
+            for i in range(0, 2):
+                    eco2 += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            for i in range(2, 4):
+                    tvoc += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-2))
+            print("A notification was received -> Gas: ", eco2, "  ppm", tvoc,"ppb")
+
+        elif (hnd == color_handle):
+            teptep = binascii.b2a_hex(data)
+            red = 0
+            green = 0
+            blue = 0
+            clear = 0
+            for i in range(0, 2):
+                    red += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            for i in range(2, 4):
+                    green += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-2))
+            for i in range(4, 6):
+                    blue += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-4))
+            for i in range(6, 8):
+                    clear += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-6))
+            print("A notification was received -> Color: ", red, green, blue, clear)
+            
 class EnvironmentService():
+    
+    
+    
     
     ##Environment service module. Instance the class and enable to get access to the Environment interface.
     serviceUUID  = ENVIRONMENT_SERVICE_UUID
@@ -186,6 +251,8 @@ class EnvironmentService():
         self.set_humidity_notification(False)
         self.set_gas_notification(False)
         self.set_color_notification(False)
+        
+
 
 
 

@@ -11,11 +11,11 @@ import sys
 import datetime
 import time
 import EnvironmentService
-from EnvironmentService import EnvironmentService
+from EnvironmentService import EnvironmentService, DeviceDelegate
 import Device
-from Device import Device, DeviceDelegate
-#import DeviceDelegate
-#from DeviceDelegate import DeviceDelegate
+from Device import Device
+import BatterySensor
+from BatterySensor import BatterySensor, DeviceDelegate
 
 ##Mac: FD:88:50:58:E7:45
 
@@ -50,6 +50,8 @@ if __name__ == "__main__":
     #elif (select == 5):
         #Device1.environment.set_color_notification(True)
     #elif (select == 6):
+    print('Battery Level: ' + Device1.battery.b_read())
+    Device1.battery.set_battery_notification(True)
     Device1.environment.set_temperature_notification(True)
     Device1.environment.set_pressure_notification(True)
     Device1.environment.set_humidity_notification(True)
@@ -68,6 +70,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:     
         print("Disabling Notifications and Indications...")
         Device1.environment.disable()
+        Device1.battery.disable()
         print("Notifications and Indications Disabled...")
         print("Device Session Finished...")
             
