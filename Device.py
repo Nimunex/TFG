@@ -6,6 +6,8 @@ import EnvironmentService
 from EnvironmentService import EnvironmentService, DeviceDelegate
 import BatterySensor
 from BatterySensor import BatterySensor, DeviceDelegate
+#~ import MotionService
+#~ from MotionService import MotionService, DeviceDelegate
 
 ## Thingy52 Definition
 

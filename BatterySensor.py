@@ -1,13 +1,13 @@
 from bluepy import btle
-from bluepy.btle import Peripheral, DefaultDelegate
+from bluepy.btle import UUID, Peripheral, DefaultDelegate
 import os.path
 import struct
 import sys
 
 CCCD_UUID = 0x2902
 
-BATTERY_SERVICE_UUID = "ef68180F-9b35-4933-9B10-52FFA9740042"
-BATTERY_LEVEL_UUID = "ef682AF1-9b35-4933-9B10-52FFA9740042"
+BATTERY_SERVICE_UUID = 0x180F
+BATTERY_LEVEL_UUID = 0x2A19
 
 battery_handle = None
 
@@ -28,8 +28,8 @@ class BatterySensor():
     
     ##Battery Service module. Instance the class and enable to get access to Battery interface.
     
-    svcUUID = BATTERY_SERVICE_UUID  # Ref https://www.bluetooth.com/specifications/gatt/services 
-    dataUUID = BATTERY_LEVEL_UUID # Ref https://www.bluetooth.com/specifications/gatt/characteristics
+    svcUUID = UUID(BATTERY_SERVICE_UUID)  # Ref https://www.bluetooth.com/specifications/gatt/services 
+    dataUUID = UUID(BATTERY_LEVEL_UUID) # Ref https://www.bluetooth.com/specifications/gatt/characteristics
 
     def __init__(self, periph):
         self.periph = periph

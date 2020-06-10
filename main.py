@@ -16,6 +16,8 @@ import Device
 from Device import Device
 import BatterySensor
 from BatterySensor import BatterySensor, DeviceDelegate
+#~ import MotionService
+#~ from MotionService import MotionService, DeviceDelegate
 
 ##Mac: FD:88:50:58:E7:45
 
@@ -36,6 +38,7 @@ if __name__ == "__main__":
     #select = input("Select the service (1)-Temperature (2)-Pressure (3)-Humidity (4)-Gas (5)-Color (6)-All: ")
     
     print("Enabling Environment Services...")
+    Device1.battery.enable()
     Device1.environment.enable()
     Device1.setDelegate(DeviceDelegate())
     print('Services Enabled...')
@@ -50,7 +53,7 @@ if __name__ == "__main__":
     #elif (select == 5):
         #Device1.environment.set_color_notification(True)
     #elif (select == 6):
-    print('Battery Level: ' + Device1.battery.b_read())
+    print('Battery Level: ', Device1.battery.b_read())
     Device1.battery.set_battery_notification(True)
     Device1.environment.set_temperature_notification(True)
     Device1.environment.set_pressure_notification(True)
