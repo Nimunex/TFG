@@ -10,14 +10,11 @@ import binascii
 import sys
 import datetime
 import time
-import EnvironmentService
-from EnvironmentService import EnvironmentService, DeviceDelegate
+import Services
+from Services import EnvironmentService, BatterySensor, UserInterfaceService, MotionService, DeviceDelegate
 import Device
 from Device import Device
-import BatterySensor
-from BatterySensor import BatterySensor, DeviceDelegate
-#~ import MotionService
-#~ from MotionService import MotionService, DeviceDelegate
+
 
 ##Mac: FD:88:50:58:E7:45
 
@@ -37,9 +34,11 @@ if __name__ == "__main__":
     print("Bonded...")
     #select = input("Select the service (1)-Temperature (2)-Pressure (3)-Humidity (4)-Gas (5)-Color (6)-All: ")
     
-    print("Enabling Environment Services...")
+    print("Enabling Services...")
     Device1.battery.enable()
     Device1.environment.enable()
+    #~ Device1.ui.enable()
+    #~ Device1.motion.enable()
     Device1.setDelegate(DeviceDelegate())
     print('Services Enabled...')
     #if (select == 1):
@@ -53,7 +52,7 @@ if __name__ == "__main__":
     #elif (select == 5):
         #Device1.environment.set_color_notification(True)
     #elif (select == 6):
-    print('Battery Level: ', Device1.battery.b_read())
+    print('Battery Level: ', Device1.battery.b_read(), '%')
     Device1.battery.set_battery_notification(True)
     Device1.environment.set_temperature_notification(True)
     Device1.environment.set_pressure_notification(True)
@@ -74,6 +73,8 @@ if __name__ == "__main__":
         print("Disabling Notifications and Indications...")
         Device1.environment.disable()
         Device1.battery.disable()
+        #~ Device1.ui.disable()
+        #~ Device1.motion.disable()
         print("Notifications and Indications Disabled...")
         print("Device Session Finished...")
             
