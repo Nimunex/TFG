@@ -89,6 +89,7 @@ rotation_handle = None
 heading_handle = None
 gravity_handle = None
 
+
 ## Useful functions
 
 
@@ -104,6 +105,7 @@ class DeviceDelegate(DefaultDelegate):
     
 
     def handleNotification(self, hnd, data):
+     
         
         ##Environment delegate
         if (hnd == temperature_handle):
@@ -157,11 +159,148 @@ class DeviceDelegate(DefaultDelegate):
             data = bytearray(data)
             battery_value = data[0]
             print("A notification was received -> Battery:", battery_value, "%")
+        
+        ##UI delegate
+        elif (hnd == button_handle):
+            data = bytearray(data)
+            button = data[0]
+            print("A notification was received -> Button[1-> pressed]: ", button)
+        
+        ##Motion delegate
+        elif (hnd == tap_handle):
+             
+            data = bytearray(data)
+            tap = data[0]
+            count = data[1]
+            if tap == 0x01:
+                print("A notification was received -> TAP_X_UP, count: ", count)
+            elif tap == 0x02:
+                print("A notification was received -> TAP_X_DOWN, count: ", count)
+            elif tap == 0x03:
+                print("A notification was received -> TAP_Y_UP, count: ", count)
+            elif tap == 0x04:
+                print("A notification was received -> TAP_Y_DOWN, count: ", count)   
+            elif tap == 0x05:
+                print("A notification was received -> TAP_Z_UP, count: ", count)   
+            elif tap == 0x06:
+                print("A notification was received -> TAP_Z_DOWN, count: ", count)   
+
+
+        elif (hnd == orient_handle):
+            data = bytearray(data)
+            orientation = data[0]
+            if orientation == 0x00:
+                print("A notification was received -> Orientation: Portrait ")
+            elif orientation == 0x01:
+                print("A notification was received -> Orientation: Landscape ")
+            elif orientation == 0x02:
+                print("A notification was received -> Orientation: Reverse Portrait ")
+            elif orientation == 0x03:
+                print("A notification was received -> Orientation: Reverse Landscape ")
+
+           
+
+        elif (hnd == quaternion_handle):
+            teptep = binascii.b2a_hex(data)
+            w = 0
+            x = 0
+            y = 0
+            z = 0
+            for i in range(0, 4):
+                    w += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            for i in range(4, 8):
+                    x += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-4))
+            for i in range(8, 12):
+                    y += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-8))
+            for i in range(12, 16):
+                    z += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-12))
+            print("A notification was received -> Quaternion(w,x,y,z): ", w, x, y, z)
+            #~ print('Notification: Quaternion: {}'.format(teptep))
+
+        elif (hnd == stepcount_handle):
+            teptep = binascii.b2a_hex(data)
+            steps = 0
+            time = 0
+            for i in range(0, 4):
+                    steps += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            for i in range(4, 8):
+                    time += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-4))
+            print("A notification was received -> Stepcount(steps,time): ", steps, time)
+            #~ print('Notification: Step Count: {}'.format(teptep))
+
+        elif (hnd == rawdata_handle):
+            teptep = binascii.b2a_hex(data)
+            ax = 0
+            ay = 0
+            az = 0
+            gx = 0
+            gy = 0
+            gz = 0
+            cx = 0
+            cy = 0
+            cz = 0
+            ##Accelerometer
+            for i in range(0, 2):
+                    ax += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            for i in range(2, 4):
+                    ay += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-2))
+            for i in range(4, 6):
+                    az += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-4))
+            ##Gyroscope
+            for i in range(6, 8):
+                    gx += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-6))
+            for i in range(8, 10):
+                    gy += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-8))
+            for i in range(10, 12):
+                    gz += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-10))
+            ##Compass
+            for i in range(12, 14):
+                    cx += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-12))
+            for i in range(14, 16):
+                    cy += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-14))
+            for i in range(16, 18):
+                    cz += (int(teptep[i*2:(i*2)+2], 16) << 8*(i-16))
+            print("A notification was received -> Raw data: Accelerometer(G):", ax,ay,az, "Gyroscope(deg/s):",gx, gy, gz,"Compass(uT):",cx,cy,cz)
+            #~ print('Notification: Raw data: {}'.format(teptep))
+
+        elif (hnd == euler_handle):
+            teptep = binascii.b2a_hex(data)
+            roll = 0
+            for i in range(0, 4):
+                    roll += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            #~ roll = bytes(roll)
+            roll = roll.to_bytes(4,'big')
+            roll =int.from_bytes(roll, byteorder='big', signed=True) 
+            #~ roll = int(teptep[0:2], 16) + int(teptep[2:4], 16) << 8 + int(teptep[0:2], 16)
+            #~ data = bytearray(data)
+            #~ roll = (data[3]<<32)+(data[2]<<16)+(data[1]<<8) + data[0]
+            
+            #~ pitch = data[4:8]
+            
+    
+            print("A notification was received -> Euler(roll,pitch,yaw)[degrees]: ", roll)
+            
+            #~ print('Notification: Euler: {}'.format(teptep))
+
+        elif (hnd == rotation_handle):
+            teptep = binascii.b2a_hex(data)
+            print('Notification: Rotation matrix: {}'.format(teptep))
+
+        elif (hnd == heading_handle):
+            teptep = binascii.b2a_hex(data)
+            heading = 0
+            for i in range(0, 4):
+                    heading += (int(teptep[i*2:(i*2)+2], 16) << 8*i)
+            print("A notification was received -> Heading(degrees): ", heading)
+            #~ print('Notification: Heading: {}'.format(teptep))
+
+        elif (hnd == gravity_handle):
+            teptep = binascii.b2a_hex(data)
+            print('Notification: Gravity: {}'.format(teptep))     
+            
+            
             
 class EnvironmentService():
-    
-    
-    
     
     ##Environment service module. Instance the class and enable to get access to the Environment interface.
     serviceUUID  = ENVIRONMENT_SERVICE_UUID
@@ -170,6 +309,7 @@ class EnvironmentService():
     humidity_char_uuid  = HUMIDITY_CHAR_UUID
     gas_char_uuid  = GAS_CHAR_UUID
     color_char_uuid  = COLOR_CHAR_UUID
+    config_char_uuid = CONFIG_CHAR_UUID
 
     def __init__(self, periph):
         self.periph = periph
@@ -218,8 +358,8 @@ class EnvironmentService():
             self.color_char = self.environment_service.getCharacteristics(self.color_char_uuid)[0]
             color_handle = self.color_char.getHandle()
             self.color_cccd = self.color_char.getDescriptors(forUUID=CCCD_UUID)[0]
-        #if self.config_char is None:
-            #self.config_char = self.environment_service.getCharacteristics(self.config_char_uuid)[0]
+        if self.config_char is None:
+            self.config_char = self.environment_service.getCharacteristics(self.config_char_uuid)[0]
 
     def set_temperature_notification(self, state):
         ## Enable/Disable Temperature Notifications
@@ -292,7 +432,7 @@ class EnvironmentService():
     
     
     def disable(self):
-        ## Disable All Notifications
+        ## Disable Environment Notifications
         self.set_temperature_notification(False)
         self.set_pressure_notification(False)
         self.set_humidity_notification(False)

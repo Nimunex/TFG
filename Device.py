@@ -19,8 +19,8 @@ class Device(Peripheral):
          #Thingy configuration service not implemented
         self.battery = BatterySensor(self)
         self.environment = EnvironmentService(self)
-        #self.ui = UserInterfaceService(self)
-        #self.motion = MotionService(self)
+        self.ui = UserInterfaceService(self)
+        self.motion = MotionService(self)
         #self.sound = SoundService(self)
         
         

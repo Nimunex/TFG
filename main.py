@@ -37,28 +37,50 @@ if __name__ == "__main__":
     print("Enabling Services...")
     Device1.battery.enable()
     Device1.environment.enable()
-    #~ Device1.ui.enable()
-    #~ Device1.motion.enable()
+    Device1.ui.enable()
+    Device1.motion.enable()
+    
     Device1.setDelegate(DeviceDelegate())
     print('Services Enabled...')
-    #if (select == 1):
-        #Device1.environment.set_temperature_notification(True)
-    #elif (select == 2):    
-        #Device1.environment.set_pressure_notification(True)
-    #elif (select == 3):
-        #Device1.environment.set_humidity_notification(True)
-    #elif (select == 4):
-        #Device1.environment.set_gas_notification(True)
-    #elif (select == 5):
-        #Device1.environment.set_color_notification(True)
-    #elif (select == 6):
+
     print('Battery Level: ', Device1.battery.b_read(), '%')
-    Device1.battery.set_battery_notification(True)
-    Device1.environment.set_temperature_notification(True)
-    Device1.environment.set_pressure_notification(True)
-    Device1.environment.set_humidity_notification(True)
-    Device1.environment.set_gas_notification(True)
-    Device1.environment.set_color_notification(True)
+    
+    #~ led = int(raw_input("Select the mode (1)-Off (2)-Constant (3)-Breathe (4)- One shot: "))
+    #~ if (led) == 1
+        #~ Device1.ui.set_led_mode_off()
+    #~ elif (led) == 2
+        #~ red = input("Red[0-255]: ")
+        #~ green = input("Green[0-255]: ")
+        #~ blue = input(Blue[0-255]: ")
+        #~ Device1.ui.set_led_mode_constant(red, green, blue)
+    #~ elif (led) == 3
+        #~ color = input("Color(use 0x0X)[1(Red)-2(Green)-3(Yellow)-4(Blue)-5(Purple)-6(Cyan)-7(White)]: ")
+        #~ intensity = input("Intensity(%)[1-100]: ")
+        #~ delay = input(Delay[50ms-10s]: ")
+        #~ Device1.ui.set_led_mode_breathe(color, intensity, delay)
+    #~ elif (led) == 4
+        #~ color = input("Color(use 0x0X)[1(Red)-2(Green)-3(Yellow)-4(Blue)-5(Purple)-6(Cyan)-7(White)]: ")
+        #~ intensity = input("Intensity(%)[1-100]: ")
+        #~ Device1.ui.set_led_mode_one_shot(color, intensity)
+    
+    #~ Device1.ui.set_led_mode_breathe(0x03, 50, 1000)
+    #~ Device1.battery.set_battery_notification(True)
+    #~ Device1.environment.set_temperature_notification(True)
+    #~ Device1.environment.configure(temp_int=1000)
+    #~ Device1.environment.set_pressure_notification(True)
+    #~ Device1.environment.set_humidity_notification(True)
+    #~ Device1.environment.set_gas_notification(True)
+    #~ Device1.environment.set_color_notification(True)
+    #~ Device1.ui.set_button_notification(True)
+    #~ Device1.motion.set_tap_notification(True)
+    #~ Device1.motion.set_orient_notification(True)
+    #~ Device1.motion.set_quaternion_notification(True)
+    #~ Device1.motion.set_stepcount_notification(True)
+    #~ Device1.motion.set_rawdata_notification(True)
+    Device1.motion.set_euler_notification(True)
+    #~ Device1.motion.set_rotation_notification(True)
+    #~ Device1.motion.set_heading_notification(True)
+    #~ Device1.motion.set_gravity_notification(True)
     
 
 
@@ -73,8 +95,8 @@ if __name__ == "__main__":
         print("Disabling Notifications and Indications...")
         Device1.environment.disable()
         Device1.battery.disable()
-        #~ Device1.ui.disable()
-        #~ Device1.motion.disable()
+        Device1.ui.disable()
+        Device1.motion.disable()
         print("Notifications and Indications Disabled...")
         print("Device Session Finished...")
             
